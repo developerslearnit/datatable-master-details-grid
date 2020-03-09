@@ -25,7 +25,7 @@ namespace JqueryDataTableMasterDetail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnection = @"Server=.;Database=ContosoRetailDW;Trusted_Connection=True;";
+            var dbConnection = @"Server=.;Database=MatserDetailDb;Trusted_Connection=True;";
             services.AddDbContext<ContosoRetailDWContext>(options => options.UseSqlServer(dbConnection));
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllersWithViews();

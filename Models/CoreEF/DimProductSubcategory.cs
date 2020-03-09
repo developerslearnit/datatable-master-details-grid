@@ -5,10 +5,7 @@ namespace JqueryDataTableMasterDetail.Models.CoreEF
 {
     public partial class DimProductSubcategory
     {
-        public DimProductSubcategory()
-        {
-            DimProduct = new HashSet<DimProduct>();
-        }
+       
 
         public int ProductSubcategoryKey { get; set; }
         public string ProductSubcategoryLabel { get; set; }
@@ -20,6 +17,5 @@ namespace JqueryDataTableMasterDetail.Models.CoreEF
         public DateTime? UpdateDate { get; set; }
 
         public virtual DimProductCategory ProductCategoryKeyNavigation { get; set; }
-        public virtual ICollection<DimProduct> DimProduct { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace JqueryDataTableMasterDetail.Models.CoreEF
         public DimProductCategory()
         {
             DimProductSubcategory = new HashSet<DimProductSubcategory>();
-            FactStrategyPlan = new HashSet<FactStrategyPlan>();
+            
         }
 
         public int ProductCategoryKey { get; set; }
@@ -20,6 +20,5 @@ namespace JqueryDataTableMasterDetail.Models.CoreEF
         public DateTime? UpdateDate { get; set; }
 
         public virtual ICollection<DimProductSubcategory> DimProductSubcategory { get; set; }
-        public virtual ICollection<FactStrategyPlan> FactStrategyPlan { get; set; }
     }
 }
