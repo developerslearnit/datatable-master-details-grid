@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h5>Product Categories</h5>
+    </div>
+
+    <div class="card-body">
+        <table cellspacing="0" class="table table-striped table-lightfont" id="categoryTable" style="width: 100%;">
+            <thead class="thead-light">
+                <tr>
+                    <th></th>
+                    <th>Product Name</th>
+                    <th>Product Description</th>
+                    <th>Load Date</th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+
+        function getSubCategory(id) {
+            return $.ajax({
+                    url: "/subCategory/" + id,
+                    type: "GET"
+            });
+        }
+
+        function renderChild(data) {
+            var wrapper = $('<div style="padding:5px 0" class="childWrap"></div>'),
+                result = [];
+
+              $.each(data.data, function (i, v) {
+                    result.push("<tr><td>" + v.label + "</td><td>" + v.name + "</td><td>" + v.description + "</td></tr>");
+              });
+
+            cTable = '<table class="child-table" style="width: 80%;">' +
+                    '<thead><tr><th>Label</th><th>Subcategory Name</th><th>Description</th></tr></thead>' +
+                '<tbody>' + result.join('') + '</tbody></table>';
+           wrapper.append(cTable);
+
+            return wrapper;
+        }
+
+
+
+    $(function () {
+
+        var table = $("#categoryTable").DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "orderMulti": false,
+                "ajax": {
+                    "url": '@Url.Action("loadCategories", "home", new { area = "" })',
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                     {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                    },
+                    { "data": "name", "name": "name", "autoWidth": true },
+                    { "data": "description", "name": "description", "autoWidth": true },
+                    { "data": "srtDate", "name": "srtDate", "autoWidth": true }
+                ]
+        });
+
+
+
+        $("#categoryTable tbody").on("click", "td.details-control", function () {
+
+            var tr = $(this).closest('tr'),
+                row = table.row(tr);
+
+
+            if (tr.hasClass('shown')) {
+                 $('div.childWrap', row.child()).slideUp( function () {
+                    tr.removeClass('shown');
+                    row.child().remove();
+                } );
+
+            } else {
+
+                $.when(getSubCategory(row.data().categoryId)).then(function (response) {
+                     row.child( renderChild(response), 'no-padding' ).show();
+                     tr.addClass('shown');
+                     $('div.childWrap', row.child()).slideDown();
+                });
+
+
+            }
+
+        });
+
+
+
+
+    });
+
+    </script>
+
+}
+
+
